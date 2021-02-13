@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enums", "src\Common\Enums\E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "src\Services\Logic\Logic.csproj", "{3884345E-6B99-443A-839D-E2EEB4FBB9B8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForecastBot", "src\WeatherNotifier\ForecastBot.csproj", "{1DD26A4F-C0B2-49F3-8C48-353DC9AD328B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3884345E-6B99-443A-839D-E2EEB4FBB9B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3884345E-6B99-443A-839D-E2EEB4FBB9B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3884345E-6B99-443A-839D-E2EEB4FBB9B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DD26A4F-C0B2-49F3-8C48-353DC9AD328B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD26A4F-C0B2-49F3-8C48-353DC9AD328B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD26A4F-C0B2-49F3-8C48-353DC9AD328B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD26A4F-C0B2-49F3-8C48-353DC9AD328B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
