@@ -23,7 +23,7 @@ jobs:
       
     - name: Send mail
       if: always()
-      uses: dawidd6/action-send-mail@v2
+      uses: actions/checkout@v2
       with:
         # mail server settings
         server_address: smtp.gmail.com
@@ -36,6 +36,6 @@ jobs:
         # email body as text
         body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
         # comma-separated string, send email to
-        to: ice19942335@gmail.com,somemail@gmail.com
+        to: ice19942335@gmail.com
         # from email name
         from: Aleksejs Birula
