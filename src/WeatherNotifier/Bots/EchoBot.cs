@@ -22,6 +22,8 @@ namespace Microsoft.BotBuilderSamples.Bots
 {
     public class EchoBot : ActivityHandler
     {
+        private const string CreatorsNameSpace = "Logic.Telegram.UserStatusLogic.UserStatusCreators";
+
         private readonly IUserLogic _userLogic;
         private readonly INotificationLogic _weatherNotifierLogic;
         private readonly TelegramContext _telegramContext;
@@ -35,21 +37,21 @@ namespace Microsoft.BotBuilderSamples.Bots
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
+            await turnContext.SendActivityAsync(
+                MessageFactory.Text(
+                    typeof(UserStatusEnterCityNameCreator).AssemblyQualifiedName,
+                    typeof(UserStatusEnterCityNameCreator).AssemblyQualifiedName
+                ), cancellationToken);
+
+
             string text = turnContext.Activity.Text;
-            List<string> commands = _telegramContext.TelegramCommands.Select(x => x.CommandName).ToList();
+            var commands = _telegramContext.TelegramCommands.Select(x => x.Label).ToList();
 
             if (!commands.Contains(text))
             {
-                UserStatusFactory userStatusCreator = null;
                 User user = _userLogic.GetUserById(turnContext.Activity.From.Id);
-                switch (user.UserStatus.Label)
-                {
-                    case nameof(UserStatusEnum.ENTER_CITY_NAME):
-                        userStatusCreator = new UserStatusEnterCityNameCreator();
-                        break;
-                    default: throw new ApplicationException($"user status: {user.UserStatus.Label}, does not exist!");
-                }
-                
+                UserStatusFactory userStatusCreator = GetInstance(GetFullyQualifiedCreatorInstanceName(user.UserStatus.Label));
+
                 if (userStatusCreator is null)
                     throw new ArgumentNullException(nameof(userStatusCreator));
 
@@ -79,6 +81,30 @@ namespace Microsoft.BotBuilderSamples.Bots
             await turnContext.SendActivityAsync(MessageFactory.Text("Test", "Test"), cancellationToken);
         }
 
+        /// <summary>
+        /// Gets full assembly name.
+        /// </summary>
+        /// <param name="assemblyName">Not fully qualified assembly name.</param>
+        private string GetFullyQualifiedCreatorInstanceName(string assemblyName) => $"{CreatorsNameSpace}.UserStatus{assemblyName.Replace("_", "")}Creator";
+
+        /// <summary>
+        /// Instatiating instance by assembly name.
+        /// </summary>
+        /// <param name="strFullyQualifiedName">Fully qualified assembly name.</param>
+        public UserStatusFactory GetInstance(string strFullyQualifiedName)
+        {
+            Type type = Type.GetType(strFullyQualifiedName);
+            if (type != null)
+                return (UserStatusFactory)Activator.CreateInstance(type);
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = asm.GetType(strFullyQualifiedName);
+                if (type != null)
+                    return (UserStatusFactory)Activator.CreateInstance(type);
+            }
+            return null;
+        }
+
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
             if (membersAdded is null)
@@ -92,10 +118,10 @@ namespace Microsoft.BotBuilderSamples.Bots
                     OperationResponse result = await _userLogic.AddNewUserAsync(member);
 
                     if (result.Success)
-                        result = await _userLogic.SetUserStatusAsync(member, nameof(UserStatusEnum.ENTER_CITY_NAME));
+                        result = await _userLogic.SetUserStatusAsync(member, nameof(UserStatusEnum.Enter_City_Name));
 
                     if (result.Success != true)
-                        throw new ApplicationException($"User status has not been set to: {nameof(UserStatusEnum.ENTER_CITY_NAME)}");
+                        throw new ApplicationException($"User status has not been set to: {nameof(UserStatusEnum.Enter_City_Name)}");
 
                     await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
                 }

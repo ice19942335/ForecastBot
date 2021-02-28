@@ -118,7 +118,7 @@ namespace Logic.Services.Initialization
         {
             return new List<UserStatus>
             {
-                new UserStatus() { Id = (long)UserStatusEnum.ENTER_CITY_NAME, Label = nameof(UserStatusEnum.ENTER_CITY_NAME) },
+                new UserStatus() { Id = (long)UserStatusEnum.Enter_City_Name, Label = nameof(UserStatusEnum.Enter_City_Name) },
             };
         }
     }

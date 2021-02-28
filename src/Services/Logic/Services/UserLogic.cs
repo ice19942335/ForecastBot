@@ -134,6 +134,6 @@ namespace Logic.Services
         /// Gets user by user id.
         /// </summary>
         /// <param name="id">User identifier.</param>
-        public User GetUserById(string id) => _telegramContext.Users.FirstOrDefault(x => x.Id == id);
+        public User GetUserById(string id) => _telegramContext.Users.Include(x => x.UserStatus).FirstOrDefault(x => x.Id == id);
     }
 }
